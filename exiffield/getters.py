@@ -55,7 +55,9 @@ def get_datetaken(exif: ExifType) -> Optional[datetime.datetime]:
             raise ExifError(f'Could not parse {dt_str}') from e
 
     try:
-        datetime_str = exif['GPSDateTime']['val'] + "+00:00"
+        datetime_str = exif['GPSDateTime']['val']
+        if datetime_str[-1] == 'Z':
+            datetime_str = datetime_str[:-1] + '+00:00'
         return to_datetime(datetime_str)
     except KeyError:
         pass
